@@ -13,7 +13,7 @@
 
       "UpstreamPathTemplate": "/services/catalog/{everything}",
       "UpstreamScheme": "http",
-      "UpstreamHttpMethod": ["Get","Post","Put","Delete"],
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "GatewayAuthenticationSchema",
         "AllowedScopes": [ "catalog_fullpermission" ]
@@ -32,7 +32,7 @@
       ],
       "UpstreamPathTemplate": "/services/photostock/{everything}",
       "UpstreamScheme": "http",
-      "UpstreamHttpMethod": ["Get","Post","Put","Delete"],
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "GatewayAuthenticationSchema",
         "AllowedScopes": [ "photo_stock_fullpermission" ]
@@ -89,31 +89,6 @@
       }
     },
 
-    // Order
-    {
-      "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 5015
-        }
-      ],
-
-      "UpstreamPathTemplate": "/services/order/{everything}",
-      "UpstreamScheme": "http",
-      "UpstreamHttpMethod": [
-        "Get",
-        "Post",
-        "Put",
-        "Delete"
-      ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "GatewayAuthenticationSchema",
-        "AllowedScopes": [ "order_fullpermission" ]
-      }
-    },
-
     // Payment
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -136,6 +111,31 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "GatewayAuthenticationSchema",
         "AllowedScopes": [ "payment_fullpermission" ]
+      }
+    },
+
+    // Order
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5015
+        }
+      ],
+
+      "UpstreamPathTemplate": "/services/order/{everything}",
+      "UpstreamScheme": "http",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Delete"
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "GatewayAuthenticationSchema",
+        "AllowedScopes": [ "order_fullpermission" ]
       }
     }
   ],

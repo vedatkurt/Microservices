@@ -23,7 +23,6 @@ namespace FreeCourse.Services.Order.API.Controllers
         {
             _mediator = mediator;
             this._sharedIdentityService = sharedIdentityService;
-
         }
 
         [HttpGet]

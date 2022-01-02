@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace FreeCourse.Services.Order.Application.Dtos
+namespace FreeCourse.Web.Models.Order
 {
-    public class AddressDto
+    public class CheckoutInfoInput
     {
         public string Province { get; set; }
         public string District { get; set; }
         public string Street { get; set; }
         public string ZipCode { get; set; }
         public string Line { get; set; }
+        public string CardName { get; set; }
+        public string CardNumber { get; set; }        
+        public string Expiration { get; set; }        
+        public string CVV { get; set; }
+        public string TotalPrice { get; set; }
     }
 }

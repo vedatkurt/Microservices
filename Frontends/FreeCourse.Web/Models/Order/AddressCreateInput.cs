@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace FreeCourse.Services.Order.Application.Dtos
+namespace FreeCourse.Web.Models.Order
 {
-    public class AddressDto
+    public class AddressCreateInput
     {
         public string Province { get; set; }
         public string District { get; set; }

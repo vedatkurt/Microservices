@@ -19,7 +19,7 @@
                             <th>Price</th>
                             <th>Operations</th>
                         </tr>
-                        
+
                         @foreach (var item in Model.BasketItems)
                         {
                             <tr>
@@ -29,20 +29,21 @@
                                     <a class="btn btn-danger" asp-controller="Basket" asp-action="RemoveBasketItem" asp-route-courseId="@item.CourseId">Remove</a>
                                 </td>
                             </tr>
-                            }
-                        
-                        @if (Model.HasDiscount) {
+                        }
+
+                        @if (Model.HasDiscount)
+                        {
                             <tr>
                                 <td>Discount Rate</td>
                                 <td colspan="2">% @Model.DiscountRate.Value</td>
                             </tr>
-                            }
-                        
+                        }
+
                         <tr>
                             <td>@(Model.HasDiscount ? "Discount Price" : "Total Price")</td>
                             <th colspan="2">@Model.TotalPrice TL</th>
                         </tr>
-                        
+
                     </table>
 
                     <form asp-controller="Basket" asp-action="ApplyDiscount">
@@ -71,9 +72,12 @@
                         </div>
 
                     </form>
+
+                    <a class="btn btn-success" asp-controller="Order" asp-action="Checkout">Payment Info</a>
+                    <a class="btn btn-warning" asp-controller="Home" asp-action="Index">Continue</a>
                 }
                 else
-                { 
+                {
                     <div class="alert alert-info">Empty Basket</div>
                 }
             </div>

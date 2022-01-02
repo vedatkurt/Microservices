@@ -16,7 +16,6 @@ namespace FreeCourse.Web.Models.Basket
         public string DiscountCode { get; set; }
         public int? DiscountRate { get; set; } = 10;
         private List<BasketItemViewModel> _basketItems;
-
         public List<BasketItemViewModel> BasketItems {
             get
             {
@@ -42,18 +41,15 @@ namespace FreeCourse.Web.Models.Basket
         {
             get => _basketItems.Sum(x => x.GetCurrentPrice * x.Quantity);
         }
-
         public bool HasDiscount
         {
             get => !string.IsNullOrEmpty(DiscountCode) && DiscountRate.HasValue;
         }
-
         public void CancelDiscount()
         {
             DiscountCode = null;
             DiscountRate = null;
         }
-
         public void ApplyDiscount(string code, int? rate)
         {
             DiscountCode = code;
