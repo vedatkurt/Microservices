@@ -3,11 +3,13 @@ using FreeCourse.Services.Catalog.Dtos;
 using FreeCourse.Services.Catalog.Models;
 using FreeCourse.Services.Catalog.Settings;
 using FreeCourse.Shared.Dtos;
+using Mass=MassTransit;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FreeCourse.Shared.Messages;
 
 namespace FreeCourse.Services.Catalog.Services
 {
@@ -16,8 +18,9 @@ namespace FreeCourse.Services.Catalog.Services
         private readonly IMongoCollection<Course> _courseCollection;
         private readonly IMongoCollection<Category> _categoryCollection;
         private readonly IMapper _mapper;
+        private readonly Mass.IPublishEndpoint _publishEndPoint;
 
-        public CourseService(IMapper mapper,IDatabaseSettings databaseSettings)
+        public CourseService(IMapper mapper,IDatabaseSettings databaseSettings, Mass.IPublishEndpoint publishEndPoint)
         {
             
             var client = new MongoClient(databaseSettings.ConnectionString);
@@ -26,8 +29,9 @@ namespace FreeCourse.Services.Catalog.Services
             _courseCollection = database.GetCollection<Course>(databaseSettings.CourseCollectionName);
             _categoryCollection = database.GetCollection<Category>(databaseSettings.CategoryCollectionName);
 
-            _mapper = mapper;
+            _publishEndPoint = publishEndPoint;
 
+            _mapper = mapper;
         }
 
         public async Task<Response<List<CourseDto>>> GetAllAsync() 
@@ -105,8 +109,14 @@ namespace FreeCourse.Services.Catalog.Services
                 return Response<NoContent>.Fail("Course not found", 404);
             }
 
-            return Response<NoContent>.Success(204);
+            // Publish Changed Name - RabbitMQ
+            await _publishEndPoint.Publish<CourseNameChangedEvent>(
+                new CourseNameChangedEvent {  
+                    CourseId = courseUpdateDto.Id,
+                    UpdatedName = courseUpdateDto.Name
+                });
 
+            return Response<NoContent>.Success(204);
         }
 
         public async Task<Response<NoContent>> DeleteAsync(string id)

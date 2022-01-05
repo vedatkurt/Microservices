@@ -1,8 +1,11 @@
 ﻿using FreeCourse.Services.Basket.Dtos;
 using FreeCourse.Shared.Dtos;
+using FreeCourse.Shared.Services;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -11,6 +14,7 @@ namespace FreeCourse.Services.Basket.Services
     public class BasketService : IBasketService
     {
         private readonly RedisService _redisService;
+
         public BasketService(RedisService redisService)
         {
             _redisService = redisService;

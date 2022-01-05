@@ -6,7 +6,9 @@
 @model CheckoutInfoInput
 
 <form asp-controller="Order" asp-action="Checkout" method="post">
+
     <div class="row">
+        
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
@@ -51,14 +53,23 @@
                         <label class="form-label" asp-for="CVV"></label>
                         <input class="form-control" asp-for="CVV" />
                     </div>
+                    <div class="form-check-inline">
+                        <div class="form-check">
+                            <input type="checkbox" asp-for="IsSendToQueue" />
+                            <label>Asynchronous - Use RabbitMQ</label>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-
         </div>
+
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
+
                     <h5 class="card-title">Payment Summary</h5>
+
                     <table class="tble table-striped">
                         @foreach (var item in ViewBag.basket.BasketItems as List<BasketItemViewModel>)
                         {
@@ -66,13 +77,11 @@
                                 <td>@item.CourseName</td>
                                 <td>@item.GetCurrentPrice</td>
                             </tr>
-
                         }
-                    <tr>
-                        <td>@(ViewBag.basket.HasDiscount ? "Discount Total Price" : "Total Price")</td>
-                        <td>@ViewBag.basket.TotalPrice TL</td>
-                    </tr>
-
+                        <tr>
+                            <td>@(ViewBag.basket.HasDiscount ? "Discount Total Price" : "Total Price")</td>
+                            <td>@ViewBag.basket.TotalPrice TL</td>
+                        </tr>
                     </table>
                     
                     <button type="submit" class="btn btn-success">Complete Payment</button>
@@ -81,5 +90,6 @@
 
         </div>
     </div>
+
 </form>
 

@@ -11,5 +11,10 @@ namespace FreeCourse.Services.Basket.Dtos
         public string CourseId { get; set; }
         public string CourseName { get; set; }
         public decimal Price { get; set; }
+
+        public void UpdateBasketItem(string productName)
+        {
+            CourseName = productName;
+        }
     }
 }

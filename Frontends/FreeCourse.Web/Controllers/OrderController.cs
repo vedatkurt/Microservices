@@ -21,6 +21,8 @@ namespace FreeCourse.Web.Controllers
 
         public async Task<IActionResult> Checkout()
         {
+            // Basket icerisinde Checkout yapilinca
+            // basket bilgisi ViewBag ile Checkout View icine aktariliyor.
             var basket = await _basketService.Get();
             ViewBag.basket = basket;
 
@@ -30,25 +32,55 @@ namespace FreeCourse.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(CheckoutInfoInput checkoutInfoInput)
         {
-            var orderStatus = await _orderService.CreateOrder(checkoutInfoInput);
+            // Checkout View icinde iken Checkout post edilir
 
-            if (!orderStatus.IsSuccessfull)
+            if (!checkoutInfoInput.IsSendToQueue)
             {
-                var basket = await _basketService.Get();
-                ViewBag.basket = basket;
+                // 1. yol Senkron iletisim
+                // OrderService/CreateOrder icinde Odeme ve Siparis islemleri yapilir.
 
-                ViewBag.error = orderStatus.Error;
+                var orderCreatedStatus = await _orderService.CreateOrder(checkoutInfoInput);
 
-                return View();
+                if (!orderCreatedStatus.IsSuccessfull)
+                {
+                    var basket = await _basketService.Get();
+                    ViewBag.basket = basket;
+
+                    ViewBag.error = orderCreatedStatus.Error;
+
+                    return View();
+                }
+
+                return RedirectToAction(nameof(SuccessfullCheckout), new { orderId = orderCreatedStatus.OrderId });
             }
+            else
+            {
+                // 2. yol Asenkron iletisim
+                var orderSuspendedStatus = await _orderService.SuspendOrder(checkoutInfoInput);
 
-            return RedirectToAction(nameof(SuccessfullCheckout),new { orderId = orderStatus.OrderId});
+                if (!orderSuspendedStatus.IsSuccessfull)
+                {
+                    var basket = await _basketService.Get();
+                    ViewBag.basket = basket;
+
+                    ViewBag.error = orderSuspendedStatus.Error;
+
+                    return View();
+                }
+
+                return RedirectToAction(nameof(SuccessfullCheckout), new { orderId = new Random().Next(1, 1000) });
+            }
         }
 
         public IActionResult SuccessfullCheckout(int orderId)
         {
             ViewBag.orderId = orderId;
             return View();
+        }
+
+        public async Task<IActionResult> CheckoutHistory()
+        {
+           return View(await _orderService.GetOrder());
         }
     }
 }

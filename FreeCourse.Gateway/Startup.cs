@@ -28,7 +28,6 @@ namespace FreeCourse.Gateway
         
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddAuthentication().AddJwtBearer("GatewayAuthenticationSchema", options=> {
                 options.Authority = Configuration["IdentityServerURL"];
                 options.Audience = "resource_gateway";

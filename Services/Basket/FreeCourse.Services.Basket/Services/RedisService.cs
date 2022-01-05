@@ -11,7 +11,7 @@ namespace FreeCourse.Services.Basket.Services
         private readonly string _host;
         private readonly int _port;
 
-        private ConnectionMultiplexer _ConnectionMultiplexer;
+        private ConnectionMultiplexer _connectionMultiplexer;
 
         public RedisService(string host, int port)
         {
@@ -19,8 +19,19 @@ namespace FreeCourse.Services.Basket.Services
             _port = port;
         }
 
-        public void Connect() => _ConnectionMultiplexer = ConnectionMultiplexer.Connect($"{_host}:{_port}");
-        
-        public IDatabase GetDb(int db=1) => _ConnectionMultiplexer.GetDatabase(db);
+        public void Connect()
+        {
+             _connectionMultiplexer = ConnectionMultiplexer.Connect($"{_host}:{_port}");
+        }
+
+        public IDatabase GetDb(int db = 1)
+        { 
+            return _connectionMultiplexer.GetDatabase(db); 
+        }
+
+        public List<RedisKey> GetKeys()
+        {
+            return _connectionMultiplexer.GetServer($"{_host}:{_port}").Keys(1).ToList();
+        }
     }
 }

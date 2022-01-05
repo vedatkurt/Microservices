@@ -17,7 +17,7 @@ namespace FreeCourse.Services.Basket.Controllers
     public class BasketController : CustomBaseController
     {
         private readonly IBasketService _basketService;
-        private ISharedIdentityService _sharedIdentityService;
+        private readonly ISharedIdentityService _sharedIdentityService;
 
         public BasketController(IBasketService basketService, ISharedIdentityService sharedIdentityService)
         {
@@ -26,7 +26,7 @@ namespace FreeCourse.Services.Basket.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBasket(string userId)
+        public async Task<IActionResult> GetBasket()
         {
             var claims = User.Claims;
 
