@@ -1,3 +1,4 @@
+using FreeCourse.Gateway.DelegateHandlers;
 using FreeCourse.Shared.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +35,11 @@ namespace FreeCourse.Gateway
                 options.RequireHttpsMetadata = false;
             });
 
-            services.AddOcelot();
+            
+            // 193. ders eklendi
+            services.AddOcelot().AddDelegatingHandler<TokenExchangeDelegateHandler>();
+
+            services.AddHttpClient<TokenExchangeDelegateHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

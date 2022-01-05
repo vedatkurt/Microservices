@@ -31,7 +31,6 @@ namespace FreeCourse.Web.Services
         {
             var clientAccessTokenParameters = new ClientAccessTokenParameters();
             var currentToken = await _clientAccessTokenCache.GetAsync("WebClientToken", clientAccessTokenParameters);
-
             if (currentToken != null)
             {
                 return currentToken.AccessToken;

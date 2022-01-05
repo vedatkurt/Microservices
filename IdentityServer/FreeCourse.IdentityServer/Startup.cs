@@ -60,6 +60,9 @@ namespace FreeCourse.IdentityServer
             // 40. derste eklendi.
             builder.AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
 
+            // 191. derste eklendi.
+            builder.AddExtensionGrantValidator<TokenExchangeExtensionGrantValidator>();
+
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 

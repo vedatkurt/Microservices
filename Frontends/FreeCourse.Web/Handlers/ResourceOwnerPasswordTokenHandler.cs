@@ -30,8 +30,7 @@ namespace FreeCourse.Web.Handler
 
         protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var accessToken = await _htpContextAccessor.HttpContext.GetTokenAsync(
-                OpenIdConnectParameterNames.AccessToken);
+            var accessToken = await _htpContextAccessor.HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
 
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
