@@ -1,19 +1,34 @@
 version: '3.8'
 services:
-  catalogdb:
+  catalogDB:
     image: mongo
-  basketdb:
+  basketDB:
     image: redis
-  discountdb:
+  discountDB:
     image: postgres
-  identitydb:
-    image: mcr.microsoft.com/mssql/server
-  orderdb:
-    image: mcr.microsoft.com/mssql/server
+  identityDB:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+  orderDB:
+    image: mcr.microsoft.com/mssql/server:2019-latest
   rabbitmq:
     image: rabbitmq:3.9.11-management
+  catalogAPI:
+    image: catalog_api_image
+    build:
+      context: .
+      dockerfile: Services/Catalog/FreeCourse.Services.Catalog/Dockerfile
+  identityAPI:
+    image: identity_api_image
+    build:
+      context: .
+      dockerfile: IdentityServer/FreeCourse.IdentityServer/Dockerfile
+  basketAPI:
+    image: basket_api_image
+    build:
+      context: .
+      dockerfile: Services/Basket/FreeCourse.Services.Basket/Dockerfile
 volumes:
-    catalogdb_volume:
-    discountdb_volume:
-    identitydb_volume:
-    orderdb_volume:
+    catalogDB_volume:
+    discountDB_volume:
+    identityDB_volume:
+    orderDB_volume:
