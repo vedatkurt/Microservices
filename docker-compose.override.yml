@@ -62,6 +62,7 @@ services:
       - "5011:80"
     depends_on:
       - catalogDB
+      - rabbitmq
   identityAPI:
     container_name: identityAPI
     environment:
@@ -83,3 +84,4 @@ services:
       - "5013:80"
     depends_on:
       - basketDB
+      - rabbitmq
