@@ -27,6 +27,11 @@ services:
     build:
       context: .
       dockerfile: Services/Basket/FreeCourse.Services.Basket/Dockerfile
+  discountAPI:
+    image: discount_api_image
+    build:
+      context: .
+      dockerfile: Services/Discount/FreeCourse.Services.Discount/Dockerfile
 volumes:
     catalogDB_volume:
     discountDB_volume:

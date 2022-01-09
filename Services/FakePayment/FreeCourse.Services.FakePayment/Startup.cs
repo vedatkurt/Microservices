@@ -17,7 +17,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FakePayment
+namespace FreeCourse.Services.FakePayment
 {
     public class Startup
     {

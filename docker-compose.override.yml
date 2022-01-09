@@ -56,7 +56,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RabbitMQUrl:rabbitmq
-      - identityServerURL:http://identityAPI:5001
+      - IdentityServerURL:http://identityAPI:5001
       - DatabaseSettings:ConnectionString=mongodb://catalogDB:27017
     ports:
       - "5011:80"
@@ -77,7 +77,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RabbitMQUrl:rabbitmq
-      - identityServerURL:http://identityAPI:5001
+      - IdentityServerURL:http://identityAPI:5001
       - RedisSettings:Port=6379
       - RedisSettings:Host=basketDB
     ports:
@@ -85,3 +85,13 @@ services:
     depends_on:
       - basketDB
       - rabbitmq
+  discountAPI:
+    container_name: discountAPI
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL:http://identityAPI:5001
+      - "ConnectionStrings:PostgreSql=User ID=admin; Password=Password12*; Server=discountDB; Port=5432;Database=discountdb;Integrated Security=true;Pooling=true"
+    ports:
+      - "5014:80"
+    depends_on:
+      - discountDB
