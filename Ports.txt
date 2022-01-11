@@ -10,3 +10,30 @@ Services
 	.DiscountAPI -------> 5014
 	.OrderAPI ----------> 5015
 	.FakePaymentAPI ----> 5016
+
+
+Portainer kurulumu
+----------------------------------------	
+1.docker volume create portainer_data
+2.docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+3. User create edilir
+4.https://localhost:9443/#!/2/docker/images ile baglanilir
+
+
+Create RabbitMQ
+----------------------------------------	
+	docker run -d -p 15672:15672 -p 5672:5672 --name rabbitmqcontainer rabbitmq:3.9.12-management
+
+----------------------------------------	
+	docker image prune
+	docker container prune
+
+----------------------------------------	
+1.Stop the container(s) using the following command:
+  docker-compose down
+2.Delete all containers using the following command:
+  docker rm -f $(docker ps -a -q)
+3.Delete all volumes using the following command:
+  docker volume rm $(docker volume ls -q)
+4.Restart the containers using the following command:
+  docker-compose up -d

@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 services:
   catalogDB:
     image: mongo
@@ -6,22 +6,22 @@ services:
     image: redis
   discountDB:
     image: postgres
-  identityDB:
+  identityserverDB:
     image: mcr.microsoft.com/mssql/server:2019-latest
   orderDB:
     image: mcr.microsoft.com/mssql/server:2019-latest
   rabbitmq:
-    image: rabbitmq:3.9.11-management
+    image: rabbitmq:3.9.12-management
+  identityserverAPI:
+    image: identityserver_api_image
+    build:
+      context: .
+      dockerfile: IdentityServer/FreeCourse.IdentityServer/Dockerfile
   catalogAPI:
     image: catalog_api_image
     build:
       context: .
       dockerfile: Services/Catalog/FreeCourse.Services.Catalog/Dockerfile
-  identityAPI:
-    image: identity_api_image
-    build:
-      context: .
-      dockerfile: IdentityServer/FreeCourse.IdentityServer/Dockerfile
   basketAPI:
     image: basket_api_image
     build:
@@ -32,8 +32,23 @@ services:
     build:
       context: .
       dockerfile: Services/Discount/FreeCourse.Services.Discount/Dockerfile
+  fakepaymentAPI:
+    image: fakepayment_api_image
+    build:
+      context: .
+      dockerfile: Services/FakePayment/FreeCourse.Services.FakePayment/Dockerfile
+  photostockAPI:
+    image: photostock_api_image
+    build:
+      context: .
+      dockerfile: Services/PhotoStock/FreeCourse.Services.PhotoStock/Dockerfile
+  orderAPI:
+    image: order_api_image
+    build:
+      context: .
+      dockerfile: Services/Order/FreeCourse.Services.Order.API/Dockerfile
 volumes:
-    catalogDB_volume:
-    discountDB_volume:
-    identityDB_volume:
-    orderDB_volume:
+  catalogDB_volume:
+  discountDB_volume:
+  identityserverDB_volume:
+  orderDB_volume:

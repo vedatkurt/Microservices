@@ -4,11 +4,11 @@ WORKDIR /app
 #Localhosttaki port mapleme olayi degil
 EXPOSE 80
 COPY Shared/FreeCourse.Shared/*.csproj Shared/FreeCourse.Shared/
-COPY Services/FakePayment/FreeCourse.Services.FakePayment/*.csproj Services/FakePayment/FreeCourse.Services.FakePayment/
-RUN dotnet restore Services/FakePayment/FreeCourse.Services.FakePayment/*.csproj
+COPY Services/PhotoStock/FreeCourse.Services.PhotoStock/*.csproj Services/PhotoStock/FreeCourse.Services.PhotoStock/
+RUN dotnet restore Services/PhotoStock/FreeCourse.Services.PhotoStock/*.csproj
 COPY . .
-RUN dotnet publish Services/FakePayment/FreeCourse.Services.FakePayment/*.csproj -c Release -o out
+RUN dotnet publish Services/PhotoStock/FreeCourse.Services.PhotoStock/*.csproj -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim as runtime
 WORKDIR /app
 COPY --from=build /app/out .
-ENTRYPOINT [ "dotnet","FreeCourse.Services.FakePayment.dll" ]
+ENTRYPOINT [ "dotnet","FreeCourse.Services.PhotoStock.dll" ]
