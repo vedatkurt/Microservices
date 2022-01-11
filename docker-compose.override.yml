@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 services:
   catalogDB:
     container_name: catalogDB
@@ -23,13 +23,13 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=Password12*
       - POSTGRES_DB=discountDB
-  identityDB:
-    container_name: identityDB
+  identityserverDB:
+    container_name: identityserverDB
     restart: always
     ports:
       - "1433:1433"
     volumes:
-      - identityDB_volume:/var/opt/mssql/data
+      - identityserverDB_volume:/var/opt/mssql/data
     user: root
     environment:
       - ACCEPT_EULA=Y
@@ -48,36 +48,28 @@ services:
   rabbitmq:
     container_name: rabbitmq
     restart: always
+    image: rabbitmq:3.9.12-management
     ports:
-      - "5672:5672"
-      - "15672:15672"
-  catalogAPI:
-    container_name: catalogAPI
+      # AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+  identityserverAPI:
+    container_name: identityserverAPI
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - RabbitMQUrl:rabbitmq
-      - IdentityServerURL:http://identityAPI:5001
-      - DatabaseSettings:ConnectionString=mongodb://catalogDB:27017
-    ports:
-      - "5011:80"
-    depends_on:
-      - catalogDB
-      - rabbitmq
-  identityAPI:
-    container_name: identityAPI
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:DefaultConnection=Server=identityDB,1433;Database=IdentityDB;User=sa; Password=Password12*"
+      - "ConnectionStrings:DefaultConnection=Server=identityserverDB,1433;Database=IdentityDB;User=sa; Password=Password12*"
     ports:
       - "5001:80"
     depends_on:
-      - identityDB
+      -   identityserverDB
   basketAPI:
     container_name: basketAPI
+    restart: on-failure:3
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - RabbitMQUrl:rabbitmq
-      - IdentityServerURL:http://identityAPI:5001
+      - IdentityServerURL=http://identityserverAPI:5001
+      - RabbitMQUrl=rabbitmq
       - RedisSettings:Port=6379
       - RedisSettings:Host=basketDB
     ports:
@@ -85,13 +77,62 @@ services:
     depends_on:
       - basketDB
       - rabbitmq
+  catalogAPI:
+    container_name: catalogAPI
+    restart: on-failure:3
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQUrl=rabbitmq
+      - IdentityServerURL=http://identityserverAPI:5001
+      - DatabaseSettings:ConnectionString=mongodb://catalogDB:27017
+    ports:
+      - "5011:80"
+    depends_on:
+      - catalogDB
+      - rabbitmq
   discountAPI:
     container_name: discountAPI
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - IdentityServerURL:http://identityAPI:5001
+      - IdentityServerURL=http://identityserverAPI:5001
       - "ConnectionStrings:PostgreSql=User ID=admin; Password=Password12*; Server=discountDB; Port=5432;Database=discountdb;Integrated Security=true;Pooling=true"
     ports:
       - "5014:80"
     depends_on:
       - discountDB
+  fakepaymentAPI:
+    container_name: fakepaymentAPI
+    restart: on-failure:3
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL=http://identityserverAPI:5001
+      - RabbitMQUrl=rabbitmq
+    ports:
+      - "5016:80"
+    depends_on:
+      - fakepaymentDB
+      - rabbitmq
+  photostockAPI:
+    container_name: photostockAPI
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL=http://identityserverAPI:5001
+    ports:
+      - "5012:80"
+    volumes:
+     - type: bind
+       source: C:\Users\Vedat Kurt\Desktop\photos
+       target: /app/wwwroot/photos  
+  orderAPI:
+    container_name: orderAPI
+    restart: on-failure:3
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL=http://identityserverAPI:5001
+      - RabbitMQUrl=rabbitmq
+      - "ConnectionStrings:DefaultConnection=Server=orderDB,1433;Database=orderDB;User=sa; Password=Password12*"
+    ports:
+      - "5015:80"
+    depends_on:
+      - orderDB
+      - rabbitmq

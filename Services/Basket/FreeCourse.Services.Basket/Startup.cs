@@ -45,7 +45,6 @@ namespace FreeCourse.Services.Basket
                         host.Username("guest");
                         host.Password("guest");
                     });
-
                     // 188.ders - Configure Consumer
                     cfg.ReceiveEndpoint("course-name-changed-event-basket-service", e =>
                     {
@@ -53,7 +52,6 @@ namespace FreeCourse.Services.Basket
                     });
                 });
             });
-
             services.AddMassTransitHostedService();
 
             // 60.derste eklendi

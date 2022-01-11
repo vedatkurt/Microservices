@@ -51,10 +51,10 @@ namespace FreeCourse.IdentityServer
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
             })
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiResources(Config.ApiResources)
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
+                .AddInMemoryIdentityResources(Config.GetIdentityResources)
+                .AddInMemoryApiResources(Config.GetApiResources)
+                .AddInMemoryApiScopes(Config.GetApiScopes)
+                .AddInMemoryClients(Config.GetClients)
                 .AddAspNetIdentity<ApplicationUser>();
 
             // 40. derste eklendi.
